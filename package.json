@@ -1,0 +1,11 @@
+{
+  "name": "axios-factory",
+  "version": "0.0.1",
+  "dependencies": {
+    "axios": "^0.19.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flying8824315/axios-factory.git "
+  }
+}
