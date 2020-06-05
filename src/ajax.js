@@ -22,7 +22,7 @@ function typeOf(value) {
   return Object.prototype.toString.call(value).slice(8, -1);
 }
 
-export function ajaxFactory(config, errorDefaultsKey, errorMatchersKey) {
+export function ajaxFactory(config, responseErrorChain/* Object|Array */) {
   const dftObj = {};
   const {beforeDoRequest = opts => opts, ...settings} = config;
   let $instance = axios.create(settings);
@@ -126,7 +126,7 @@ export function ajaxFactory(config, errorDefaultsKey, errorMatchersKey) {
   }
 
   function hasBody(method) {
-    return 'GET,DELETE'.indexOf(method.toUpperCase()) < 0;
+    return 'GET,HEAD,DELETE'.indexOf(method ) < 0;
   }
 
   function registry(remoteUrl, method = 'GET', options = {}) {
@@ -155,7 +155,7 @@ export function ajaxFactory(config, errorDefaultsKey, errorMatchersKey) {
     });
   }
 
-  function shortRegistry(method) {
+  function fastRegistry(method) {
     return (url, opts) => registry(url, method, opts);
   }
 
@@ -313,17 +313,17 @@ export function ajaxFactory(config, errorDefaultsKey, errorMatchersKey) {
     // 注册，返回请求函数
     registry,
     // 获取数据
-    get: shortRegistry('GET'),
+    get: fastRegistry('GET'),
     // 提交数据：表单提交, 文件上传等
-    post: shortRegistry('POST'),
+    post: fastRegistry('POST'),
     // 更新数据（替换原数据：所有数据推送到后端）
-    put: shortRegistry('PUT'),
+    put: fastRegistry('PUT'),
     // 更新数据（部分修改：只更新修改的数据）
-    patch: shortRegistry('PATCH'),
+    patch: fastRegistry('PATCH'),
     // 删除数据
-    delete: shortRegistry('DELETE'),
+    delete: fastRegistry('DELETE'),
     // 删除数据
-    del: shortRegistry('DELETE'),
+    del: fastRegistry('DELETE'),
   };
   return api;
 }
